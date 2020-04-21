@@ -8,10 +8,10 @@ import Color exposing (Color)
 import Path
 import Shape exposing (defaultPieConfig)
 import TypedSvg exposing (g, svg, text_)
-import TypedSvg.Attributes exposing (dy, fill, stroke, textAnchor, transform)
+import TypedSvg.Attributes exposing (dy, fill, stroke, textAnchor, transform, viewBox)
 import TypedSvg.Attributes.InPx exposing (height, width)
 import TypedSvg.Core exposing (Svg, text)
-import TypedSvg.Types exposing (AnchorAlignment(..), Fill(..), Transform(..), em)
+import TypedSvg.Types exposing (AnchorAlignment(..), Paint(..), Transform(..), em)
 
 
 w : Float
@@ -49,7 +49,7 @@ view model =
             model |> List.map Tuple.second |> Shape.pie { defaultPieConfig | outerRadius = radius }
 
         makeSlice index datum =
-            Path.element (Shape.arc datum) [ fill <| Fill <| Maybe.withDefault Color.black <| Array.get index colors, stroke Color.white ]
+            Path.element (Shape.arc datum) [ fill <| Paint <| Maybe.withDefault Color.black <| Array.get index colors, stroke <| Paint Color.white ]
 
         makeLabel slice ( label, value ) =
             let
@@ -63,7 +63,7 @@ view model =
                 ]
                 [ text label ]
     in
-    svg [ width w, height h ]
+    svg [ viewBox 0 0 w h ]
         [ g [ transform [ Translate (w / 2) (h / 2) ] ]
             [ g [] <| List.indexedMap makeSlice pieData
             , g [] <| List.map2 makeLabel pieData model

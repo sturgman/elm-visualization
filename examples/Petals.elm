@@ -9,9 +9,9 @@ import Scale
 import Scale.Color
 import TypedSvg exposing (circle, svg)
 import TypedSvg.Attributes exposing (fill, viewBox)
-import TypedSvg.Attributes.InPx exposing (cx, cy, height, r, width)
+import TypedSvg.Attributes.InPx exposing (cx, cy, r)
 import TypedSvg.Core exposing (Svg)
-import TypedSvg.Types exposing (Fill(..))
+import TypedSvg.Types exposing (Paint(..))
 
 
 w : Float
@@ -38,12 +38,12 @@ makePetal i =
         angle =
             modBy 360 (floor (toFloat i * (3 - sqrt 5) * pi * 180 - sqrt (toFloat i) * 4))
     in
-    circle [ cx x, cy y, r 5, fill (Fill (color angle)) ] []
+    circle [ cx x, cy y, r 5, fill <| Paint <| color angle ] []
 
 
 view : List Int -> Svg msg
 view model =
-    svg [ width w, height h, viewBox -500 -500 1000 1000 ] <|
+    svg [ viewBox -1000 -500 2000 2000 ] <|
         List.map makePetal model
 
 

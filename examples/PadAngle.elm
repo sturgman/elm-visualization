@@ -8,10 +8,9 @@ import Color exposing (Color)
 import Path
 import Shape exposing (Arc, defaultPieConfig)
 import TypedSvg exposing (g, svg)
-import TypedSvg.Attributes exposing (fill, stroke, transform)
-import TypedSvg.Attributes.InPx exposing (height, width)
+import TypedSvg.Attributes exposing (fill, stroke, transform, viewBox)
 import TypedSvg.Core exposing (Svg)
-import TypedSvg.Types exposing (Fill(..), Transform(..))
+import TypedSvg.Types exposing (Paint(..), Transform(..))
 
 
 w : Float
@@ -60,8 +59,8 @@ circular arcs =
     let
         makeSlice index datum =
             Path.element (Shape.arc datum)
-                [ fill <| Fill <| Maybe.withDefault Color.black <| Array.get index colors
-                , stroke Color.black
+                [ fill <| Paint <| Maybe.withDefault Color.black <| Array.get index colors
+                , stroke <| Paint Color.black
                 ]
     in
     g [ transform [ Translate radius radius ] ]
@@ -74,8 +73,8 @@ annular arcs =
     let
         makeSlice index datum =
             Path.element (Shape.arc { datum | innerRadius = radius - 60 })
-                [ fill <| Fill <| Maybe.withDefault Color.black <| Array.get index colors
-                , stroke Color.black
+                [ fill <| Paint <| Maybe.withDefault Color.black <| Array.get index colors
+                , stroke <| Paint Color.black
                 ]
     in
     g [ transform [ Translate (3 * radius + 20) radius ] ]
@@ -89,7 +88,7 @@ view model =
         pieData =
             model |> Shape.pie { defaultPieConfig | outerRadius = radius, padAngle = 0.03 }
     in
-    svg [ width w, height h ]
+    svg [ viewBox 0 0 w h ]
         [ circular pieData
         , annular pieData
         ]
